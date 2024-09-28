@@ -1,0 +1,44 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+string findLongestCommonSubstring(string str1, string str2) {
+    int len = str1.length();
+    int longestLength = 0;
+    int substringEndIndex = 0;  
+
+    vector<vector<int>> lookupTable(len + 1, vector<int>(len + 1, 0));
+   
+    for (int i = 1; i <= len; i++) {
+        for (int j = 1; j <= len; j++) {
+            if (str1[i - 1] == str2[j - 1]) {
+                lookupTable[i][j] = lookupTable[i - 1][j - 1] + 1;
+                if (lookupTable[i][j] > longestLength) {
+                    longestLength = lookupTable[i][j];
+                    substringEndIndex = i - 1;
+                }
+            }
+        }
+    }
+   
+    cout << "table:" << endl;
+    for (int i = 0; i <= len; i++) {
+        for (int j = 0; j <= len; j++) {
+            cout << lookupTable[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+    return str1.substr(substringEndIndex - longestLength + 1, longestLength);
+}
+
+int main() {
+    string input1 = "ABAB";
+    string input2 = "BABA";
+    string result = findLongestCommonSubstring(input1, input2);
+    cout << "longest common substring is: " << result << endl;
+    return 0;
+}
